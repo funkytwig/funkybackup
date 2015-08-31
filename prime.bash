@@ -23,4 +23,4 @@ ls -l "$path_to_store_backups"
 echo "Creating logfile, you may need to type password for sudo"
 
 sudo touch "$logfile"
-sudo chown "$user.$user $logfile"
+sudo "chown $user.$user $logfile"
