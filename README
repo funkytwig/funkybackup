@@ -17,9 +17,12 @@ The differences are
 
 Setup
 
-The scripts should be put in there own diesteoy (e.g. ~/bash). There is a config files called vars.inc.bash which
-has comments in it to explain the not obvious varables.  The backup is run through a crontab, there is an example 
-called crontab.txt.
+The scripts should be put in there own directory (e.g. ~/bash). 
+
+There needs to be a config files called vars.inc.bash.  There is a file called vars.inc.bash.example which should
+be copied to vars.inc.bashi and updated.  It has comments in it to explain the not obvious varables.  
+
+The backup is run through a crontab, there is an example called crontab.txt.
 
 For the scripts to work you must prime the backup directory.  Adter seting up vars.inc.bash run ./prime.bash.
 This creates a empty backup directory and creates an emapty logfile whith belongs to the current user (if the 
