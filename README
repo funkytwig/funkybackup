@@ -1,0 +1,35 @@
+FUNKYBACKIP - http://www.funkytwig.com/blog/funkybackup
+
+A backup script for Linux which is simeler to, and build upon the Mac Timemachine:
+* Backup every hour and keep for a day
+* Backup every day and keep for a month
+* Backup every month and keep for a year
+* Backup every year
+* Is very efficient as (incremental backups):
+  * Only hold each version of a file once (using the minimum amount of disk space)
+  * Only copies files that have changes (using minimum resources, disk, CPU and network (if copying over net) )
+* Is extremely easy for users to restore
+
+The differences are
+* It can backup more frequently than an houre (i.e. every 10 minutes)
+* It sends emails if backups did not hapen for a predefined time
+* It does not have a GUI but instead relies on a human readable file system
+
+Setup
+
+The scripts should be put in there own diesteoy (e.g. ~/bash). There is a config files called vars.inc.bash which
+has comments in it to explain the not obvious varables.  The backup is run through a crontab, there is an example 
+called crontab.txt.
+
+As the script sends emails the box needs the ability to do so.  If there is not ssmtp is a lightweight package
+that  along with mailutils can send email (but only send, it is not a fill mailserver).
+
+For the user to restore files the filesysyrm containing the backups need to be available to users (i.e. via samba).
+
+Licence
+
+See LICENCE
+
+Contact Me
+
+To contact me see http://www.funkytwig.com/contact-us
