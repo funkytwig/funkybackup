@@ -1,14 +1,13 @@
-# vars - funkybackup configuration script
+# vars.inc.bash - funkybackup configuration script
 #
-# For more details about the script and to me goto 
+# This is called vars.inc.bash in the git repository
+# and should be copied to vars.inc.bash and mofified
+#
+# For more details about the script and to contact me goto 
 # http://www.funkytwig.com/blog/funkybackup
 #
 # (c) 2015 Ben Edwards (funkytwig.com) 
-# You are alowed to use the script if you keep this head0er 
-# and do not redistibute it, just send people to the URL
-#
-# Ver   Coments
-# 0.5   Initial version
+# Please be respectful and keep this header
 
 set -f
 
@@ -18,7 +17,8 @@ what_to_backup=/home/pi/bash/.
 exclude="*.tmp"
 path_to_store_backups=/home/pi/backups
 to_email=ben@funkytwig.com
-link_down_max_min=1 # if link missing for rore than this send email
+link_down_max_min=1 # if link missing for more than this send email
+disk_low_warning_percent="80" # send email warning if disk space low
 
 # You should not need to change anything below this line
 
@@ -28,7 +28,7 @@ latest_backup=$path_to_store_backups/${backup_name}_9999999999_current
 logstamp=`date +%D_%R`
 logfile=/var/log/funkybackup.$user.log
 basename=`basename $0 .bash`
-waitfile=/tmp/${user}_${backup_name}_wait.tmp
-lockfile=/tmp/${user}_${backup_name}_lock.tmp
+waitfile=/tmp/${user}_${backup_name}_wait.funkybackup
+lockfile=/tmp/${user}_${backup_name}_lock.funkybackup
 
 set +f
