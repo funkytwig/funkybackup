@@ -1,0 +1,13 @@
+# Min  hour    Day     Month           DayOfWeek
+
+*/5    *       *       *               * cd /home/pi/bash; ./run_backup.bash
+56     *       *       *               * cd /home/pi/bash; ./run_backup_close_period.bash H
+57     23      *       *               * cd /home/pi/bash; ./run_backup_close_period.bash D
+
+# Run on last day of month (although for leep years will be day before last)
+
+58     23      31      1,3,5,7,8,10,12 * cd /home/pi/bash; ./run_backup_close_period.bash M
+58     23      30      4,6,9,11        * cd /home/pi/bash; ./run_backup_close_period.bash M
+58     23      28      2               * cd /home/pi/bash; ./run_backup_close_period.bash M
+
+59     23      31      12              * cd /home/pi/bash; ./run_backup_close_period.bash Y
