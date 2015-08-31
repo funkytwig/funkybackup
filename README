@@ -21,6 +21,10 @@ The scripts should be put in there own diesteoy (e.g. ~/bash). There is a config
 has comments in it to explain the not obvious varables.  The backup is run through a crontab, there is an example 
 called crontab.txt.
 
+For the scripts to work you must prime the backup directory.  Adter seting up vars.inc.bash run ./prime.bash.
+This creates a empty backup directory and creates an emapty logfile whith belongs to the current user (if the 
+scripts are being run as root this is not nessesery but does no harm).
+  
 As the script sends emails the box needs the ability to do so.  If there is not ssmtp is a lightweight package
 that  along with mailutils can send email (but only send, it is not a fill mailserver).
 

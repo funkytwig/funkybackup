@@ -28,5 +28,7 @@ latest_backup=$path_to_store_backups/${backup_name}_9999999999_current
 logstamp=`date +%D_%R`
 logfile=/var/log/funkybackup.$user.log
 basename=`basename $0 .bash`
+waitfile=/tmp/${user}_${backup_name}_wait.tmp
+lockfile=/tmp/${user}_${backup_name}_lock.tmp
 
 set +f

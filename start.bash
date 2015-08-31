@@ -8,7 +8,7 @@ function check_dir_exists {
 
   while [ ! -d "$directory" ]
   do
-    touch waiting.tmp
+    touch $waitfile
     lock_pass_since_error=$((lock_pass+1))
     sleep 60
     if [ ! -d $directory ]; then
@@ -21,7 +21,7 @@ function check_dir_exists {
       loop_pass_since_error=0
     else
     # finished waiting
-      rm waiting.tmp
+      rm $waitfile
     fi
   done
 }
@@ -29,8 +29,8 @@ function check_dir_exists {
 # if another script is waiting for a directory to become available (check_dir_exists) exit script otherwise
 # cron will spawn lots of scripts that will all run at once.
 
-if [ -f waiting.tmp ]; then
-  log "Another script is waiting for directory to become available to exit"
+if [ -f $waitfile ]; then
+  log "EXITING, Another script is waiting for directory to become available"
   exit 1
 fi
 
@@ -55,7 +55,7 @@ fi
 
 lock_pass=0
 
-while [ -f backup.lock.tmp ] 
+while [ -f $lockfile ] 
 do
   lock_pass=$((lock_pass+1))
   log "Waiting 15 seconds for lock (pass $lock_pass)"
@@ -67,8 +67,7 @@ do
   fi
 done
 
-touch backup.lock.tmp
-
+touch $lockfile
 
 # ensure backup directory is present, if it is not this may be it is a USB drive and use total_down_min to warn if backup
 # has not been done for a while. This will also warn if link has got broked, if this hapens the backup will become a full

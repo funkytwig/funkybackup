@@ -7,4 +7,4 @@ run_time=$(($script_end-$script_start))
 
 log "END, run time=$run_time seconds"
 
-rm backup.lock.tmp
+rm $lockfile
