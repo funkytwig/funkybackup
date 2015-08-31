@@ -8,6 +8,7 @@ function check_dir_exists {
 
 	while [ ! -d "$directory" ]
 	do
+		touch waiting.tmp
 		lock_pass_since_error=$((lock_pass+1))
 		sleep 60
 		if [ ! -d $directory ]; then
@@ -18,10 +19,21 @@ function check_dir_exists {
 	        		error "$directory not accessable for more then $total_down_min minutes"
 			fi
  			loop_pass_since_error=0
+		else
+			# finished waiting
+			rm waiting.tmp
 		fi
         done
 
 }
+
+# if another script is waiting for a directory to become available (check_dir_exists) exit script otherwise
+# cron will spawn lots of scripts that will all run at once.
+
+if [ -f waiting.tmp ]; then
+  log "Another script is waiting for directory to become available to exit"
+  exit 1
+fi
 
 # make sure all varables set in vars.inc.bash
 
@@ -47,9 +59,9 @@ lock_pass=0
 while [ -f backup.lock.tmp ] 
 do
         lock_pass=$((lock_pass+1))
-	log "Waiting 5 seconds for lock (pass $lock_pass)"
-        sleep 5
-        if [ $lock_pass -gt 100 ]; then
+	log "Waiting 15 seconds for lock (pass $lock_pass)"
+        sleep 15
+        if [ $lock_pass -gt 60 ]; then
                 error "Waiting for lock for more than 15 minutes" 
                 exit 1
         fi

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -v
 #
 # back.bash - Main funkybackup script
 #
