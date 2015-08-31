@@ -16,7 +16,7 @@ function log {
 	if [ $interactive -eq 1 ]; then
 		echo  $log_text
 	else
-		echo "$logstamp $basename $1" >> $logfile
+		echo "$logstamp $basename($$) $1" >> $logfile
 	fi
 }
 
