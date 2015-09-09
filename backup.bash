@@ -57,7 +57,7 @@ else
   rsync_exclude=""
 fi
 
-rsync_cmd="rsync -r -t -i $rsync_exclude --delete --link-dest=$latest_backup $what_to_backup $new_backup"
+rsync_cmd="rsync $rsync_options $rsync_exclude --delete --link-dest=$latest_backup $what_to_backup $new_backup"
 
 run_cmd "$rsync_cmd"
 
