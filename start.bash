@@ -67,8 +67,6 @@ do
   fi
 done
 
-touch $lockfile
-
 # ensure backup directory is present, if it is not this may be it is a USB drive and use total_down_min to warn if backup
 # has not been done for a while. This will also warn if link has got broked, if this hapens the backup will become a full
 # rather than incramental and lots of disk space will be used.  Need to add check to see if the link is broke rather than
@@ -77,6 +75,8 @@ touch $lockfile
 
 check_dir_exists $what_to_backup
 check_dir_exists $path_to_store_backups
+
+touch $lockfile
 
 # set script start here as it is to show how long the actual work took (i.e. dont include backup directory down or lock wait
 
