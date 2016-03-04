@@ -31,7 +31,16 @@ scripts are being run as root this is not nessesery but does no harm).
 As the script sends emails the box needs the ability to do so.  If there is not ssmtp is a lightweight package
 that  along with mailutils can send email (but only send, it is not a fill mailserver).
 
-For the user to restore files the filesysyrm containing the backups need to be available to users (i.e. via samba).
+For the user to restore files the filesystem containing the backups need to be available to users (i.e. via samba).
+
+If you are on a debian based system to rotate the logfiles every week and keep 4 weeks logs create a files called 
+/etc/logrotate.d/funkybackup (as root) with the folwing in it:
+
+/var/log/funkybackup.*.log {
+  weekly
+  rorate 4
+  compress
+}
 
 Licence
 
