@@ -19,6 +19,12 @@ path_to_store_backups=/home/pi/backups
 to_email=ben@funkytwig.com
 link_down_max_min=1 # if link missing for more than this send email
 disk_low_warning_percent="80" # send email warning if disk space low
+# NTFS does not suport full persisions so -t is safer as it does not 
+# try to copy permisions (and ends up doing a full backup eatch time).
+# if you want a full backup and are doing linux to linux filesystems 
+# use -a instead of -a
+rsync_options="-r -t -i" # if source or targit are NTFS
+#rsync_options="-a -i" # if source and target are Linux filesystems
 
 # You should not need to change anything below this line
 
