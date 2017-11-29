@@ -13,7 +13,7 @@ set -f
 
 backup_name=bash
 script_home=/home/pi/bash/
-what_to_backup=/home/pi/bash/.
+what_to_backup=user@domail.tld:/mnt/nas01/.
 exclude="*.tmp"
 path_to_store_backups=/home/pi/backups
 to_email=ben@funkytwig.com
