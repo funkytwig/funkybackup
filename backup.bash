@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash  
 #
 # back.bash - Main funkybackup script
 #
@@ -57,14 +57,46 @@ else
   rsync_exclude=""
 fi
 
-rsync_cmd="rsync $rsync_options $rsync_exclude --delete --link-dest=$latest_backup $what_to_backup $new_backup"
 
-run_cmd "$rsync_cmd"
+# if rsync failers try running 4 times as link may be down, this may be during a big rsync is happening.
+# The rsync comand will pickup where it has left off.  Note this will mean the log file will only show the output 
+# from tha last rsync.  Note alough return codes are negative bash turns them to posative integers.
+
+try=0
+ret_code=-1 # to insure the loop runs at least once
+
+while [ "$ret_code" -ne "0" ]
+do
+  ((try++))
+
+  rsync_cmd="rsync $rsync_options $rsync_exclude --delete --link-dest=$latest_backup $what_to_backup $new_backup"
+
+  run_cmd "$rsync_cmd"
+
+  ret_code=$?
+
+  log "return code $ret_code"
+
+  if [ "$ret_code" -ne "0" ]; then 
+    log "rsync FAILED with code $ret_code, waiting 120 seconds and trying again (try $try)"
+    sleep 120;
+  fi
+
+  if [ "$try" -gt "9" ]; then
+    error "rsync failes 10 times, exiting"
+    run_cmd "rm  $lockfile"
+    exit 1;
+  fi
+done
 
 # Point current symbolic link to new backup
 
-run_cmd "rm -f $latest_backup"
-run_cmd "ln -s $new_backup $latest_backup"
+if [  "$ret_code" -ne "0" ]; then
+  run_cmd "rm -rf $new_backup" # rsync failed so delete its target directory, should never get here
+else
+  run_cmd "rm -f $latest_backup"
+  run_cmd "ln -s $new_backup $latest_backup"
+fi
 
 source end.bash
 

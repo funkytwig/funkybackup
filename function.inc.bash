@@ -14,9 +14,27 @@ function log {
   log_text="$logstamp $basename $1"
 
   if [ $interactive -eq 1 ]; then
-    echo  $log_text
+    echo $log_text
+  fi
+
+  echo "$logstamp $basename($$) $1" >> $logfile
+}
+
+function write_error_date {
+  echo $today > $lasterror
+}
+
+function error_today { #                        ***** not used anywhare yet # *****
+  if [ -s $lasterror ]; then
+    read -r line < $lasterror
   else
-    echo "$logstamp $basename($$) $1" >> $logfile
+    line = ""; # will make next bit echo N, (no errors today)
+  fi
+
+  if [ "$line" = "$today" ]; then
+    echo "Y"
+  else
+    echo "N"
   fi
 }
 
@@ -43,6 +61,8 @@ function run_cmd {
   if [ $ret -ne 0 ]; then
     log "$ret : $1"
   fi
+
+  return $ret
 }
 
 function send_email {
@@ -68,5 +88,11 @@ function send_email {
 
 function error {
   log "ERROR $1"
+
+  # to avoide lots or error emails see if an email has already been sent today
+
   send_email "Error from $0" "$1"
+
+  write_error_date 
 }
+

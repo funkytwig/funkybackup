@@ -14,7 +14,7 @@
 source vars.inc.bash
 source function.inc.bash
 
-if [ ! -d $what_to_backup ] || [ ! -d $path_to_store_backups ]; then
+if [ ! -d $path_to_store_backups ]; then
   log "Atemting to remount(`pwd`)"
   mount -a
 fi

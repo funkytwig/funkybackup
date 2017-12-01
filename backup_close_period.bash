@@ -53,65 +53,60 @@ this_back_type=$1
 
 if [ -z "$this_back_type" ]; then
   error "Backup type argument missing"
-  exit 1
+else
+
+  case "$this_back_type" in
+          "H") datetime_mask=`date +%d%b%Y_%H` # close hour
+               prev_back_type="F"
+               cmin=60;;
+          "D") datetime_mask=`date +%d%b%Y` # close day
+               prev_back_type="H"
+               cmin=1440;; 
+          "M") datetime_mask=`date +%b%Y` # close month
+               prev_back_type="D"
+	       cmin=44640;;
+          "Y") datetime_mask=`date +%Y` # close year
+               prev_back_type="M"
+	       cmin=525949;;
+  esac
+
+  log="backup type=$this_back_type, datetime_mask=$datetime_mask, " 
+  log+="previous backup type=$prev_back_type, cmin=$cmin"
+
+  log "$log"
+
+  cd $path_to_store_backups
+
+  # Get name of the directory to make into curent backup type 
+
+  mask="$backup_name*_${prev_back_type}_*$datetime_mask*"
+
+  log "geting latest directory matching $mask"
+
+  last_dir=`ls -d1 $mask | grep -v current | sort | tail -1`
+
+  if [ -z "$last_dir" ]; then
+    error "No last directory found"
+  else
+
+    rename_to=`echo $last_dir | sed "s/_${prev_back_type}_/_${this_back_type}_/g"`
+
+    run_cmd "rm -f $latest_backup"
+    run_cmd "mv $last_dir $rename_to"
+    run_cmd "ln -s $rename_to $latest_backup"
+
+    log "deleting $prev_back_type backups older than $cmin minutes"
+
+    tmp_log=/tmp/$$_find.log
+
+    find -maxdepth 1 -type d -name "$backup_name*_${prev_back_type}_*"  \
+         -cmin +$cmin -print -exec rm -r {} \; > $tmp_log 2>&1
+
+    if [ -f $tmp_log ]; then
+      log_file $tmp_log
+    fi
+  fi
 fi
-
-case "$this_back_type" in
-        "H") datetime_mask=`date +%d%b%Y_%H` # close hour
-             prev_back_type="F"
-	     cmin=60;;
-        "D") datetime_mask=`date +%d%b%Y` # close day
-             prev_back_type="H"
-	     cmin=1440;; 
-        "M") datetime_mask=`date +%b%Y` # close month
-             prev_back_type="D"
-	     cmin=44640;;
-        "Y") datetime_mask=`date +%Y` # close year
-             prev_back_type="M"
-	     cmin=525949;;
-esac
-
-log="backup type=$this_back_type, datetime_mask=$datetime_mask, " 
-log+="previous backup type=$prev_back_type, cmin=$cmin"
-
-log "$log"
-
-cd $path_to_store_backups
-
-# Get name of the directory to make into curent backup type 
-
-mask="$backup_name*_${prev_back_type}_*$datetime_mask*"
-
-log "geting latest directory matching $mask"
-
-last_dir=`ls -d1 $mask | grep -v current | sort | tail -1`
-
-if [ -z "$last_dir" ]; then
-  error "No last directory found"
-  exit 1
-fi
-
-rename_to=`echo $last_dir | sed "s/_${prev_back_type}_/_${this_back_type}_/g"`
-
-run_cmd "rm -f $latest_backup"
-run_cmd "mv $last_dir $rename_to"
-run_cmd "ln -s $rename_to $latest_backup"
-
-log "deleting $prev_back_type backups older than $cmin minutes"
-
-tmp_log=/tmp/$$_find.log
-
-find -maxdepth 1 -type d -name "$backup_name*_${prev_back_type}_*"  \
-     -cmin +$cmin -print -exec rm -r {} \; > $tmp_log 2>&1
-
-if [ -f $tmp_log ]; then
-  log_file $tmp_log
-fi
-
-#cmd="find -maxdepth 1 -type d -name \"$backup_name*_${prev_back_type}_*\" "
-#cmd+="-cmin +$cmin -print -exec rm -r {} \;"
-
-#run_cmd "$cmd"
 
 cd $script_home
 
