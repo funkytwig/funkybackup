@@ -22,22 +22,22 @@ fi
 # create main backup directory if it does not exist
 
 if [ ! -d "$path_to_store_backups" ]; then
-  mkdir "$path_to_store_backups"
+  sudo mkdir -p "$path_to_store_backups"
 else
   echo  "$path_to_store_backups already exists"
 fi 
 
 # Create empty backup directory directory
 
-mkdir "$new_backup"
+sudo mkdir "$new_backup"
 
 # create current directory link
 
 if [ -d $latest_backup ]; then
-  rm -r $latest_backup # incase it already esists
+  sudo rm -r $latest_backup # incase it already esists
 fi
 
-ln -s $new_backup $latest_backup
+sudo ln -s $new_backup $latest_backup
 
 echo "Created initial directory and link, it should be shown below:"
 

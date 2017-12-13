@@ -11,4 +11,4 @@ today=`date +%D`
 
 grep "$today" $logfile > $temp_file
 
-send_email "Backup Logfile for $today" "Here is todays funkybackup logfile" "$temp_file"
+send_email "$HOSTNAME funkybackup ($today)" "Here is todays funkybackup logfile" "$temp_file"
